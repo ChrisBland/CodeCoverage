@@ -1,0 +1,46 @@
+extends layout
+
+block content
+  link(rel="stylesheet", type="text/css", href="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/css/jquery.dataTables.css")
+  script(type="text/javascript", charset="utf8", src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.2.min.js")
+  script(type="text/javascript", charset="utf8", src="http://ajax.aspnetcdn.com/ajax/jquery.dataTables/1.9.4/jquery.dataTables.min.js")
+
+  h1= title
+  div.stats
+    h2 Lines Covered: #{orgCoverage.NumLinesCovered}
+    h2 Lines Uncovered: #{orgCoverage.NumLinesUncovered}
+    h2 Coverage: #{orgCoverage.percent}%
+  div.container
+    table#coverage
+      thead
+        th Apex Class
+        th Api Version
+        th Created Date
+        th Last Modified
+        th Lines Covered
+        th Lines Uncovered
+        th Coverage %
+      tbody
+        each record in result
+          tr
+            td
+              a(href="/ApexCodeCoverageAggregate/trigger/#{record.coverage.Id}") #{record.Name}
+            td=record.ApiVersion
+            td #{moment(record.CreatedDate).format("MM/DD/YY")}
+            td #{moment(record.LastModifiedDate).format("MM/DD/YY")}
+            td=record.coverage.NumLinesCovered
+            td=record.coverage.NumLinesUncovered
+            td #{record.coverage.percent}%
+  script(src='/javascripts/raphael.2.1.0.min.js')
+  script(src='/javascripts/justgage.1.0.1.min.js')
+  script
+    $(document).ready(function(){
+      $('#coverage').dataTable();
+    });
+    //- var gauge = new JustGage({
+    //-   id: 'gauge',
+    //-   value: #{result.coverage},
+    //-   min: 0,
+    //-   max: 100,
+    //-   title: 'Apex Code Coverage'
+    //- });

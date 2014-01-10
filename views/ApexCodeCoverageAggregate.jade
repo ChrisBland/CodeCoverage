@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  script(src='/javascripts/shCore.js')
+  script(src='/javascripts/shBrushPlain.js')
+  link(rel='stylesheet', type='text/css', href='/stylesheets/shCore.css')
+  link(rel='stylesheet', type='text/css', href='/stylesheets/shThemeDefault.css')
+  h2 #{result.ApexClass.Name} 
+  h3 #{result.NumLinesCovered} lines covered 
+  h3 #{result.NumLinesUncovered} uncovered
+  pre(class="brush: plain; highlight: [#{result.Coverage.uncoveredLines}];") #{result.ApexClass.Body}
+  script(src='/javascripts/raphael.2.1.0.min.js')
+  script(src='/javascripts/justgage.1.0.1.min.js')
+  script
+    
+    SyntaxHighlighter.all();
