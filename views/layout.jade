@@ -1,7 +1,17 @@
-doctype 5
+doctype html
 html
   head
-    title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='/stylesheets/bootstrap.css')
+    script(src="/socket.io/socket.io.js")
+    
+    script(src="/js/jquery.js")
+    script(src="/js/underscore.js")
+    script(src="/js/backbone.js")
+    script(src='/js/backbone.epoxy.js')
+    script(src='/js/main.js')
+    script(src='//cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.min.js')
+    link(rel='stylesheet', href='//cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.min.css')
+    
+    title Apex Code Coverage
   body
     block content

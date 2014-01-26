@@ -1,9 +1,29 @@
 extends layout
 
 block content
-  h2 Apex Viewer
-  ul
-    li
-      a(href="/apex") Apex
-    li
-      a(href="/triggers") Triggers
+  .container
+    h1 Salesforce Code Coverage
+    #coverage
+      form
+        a.btn.btn-default Apex Classes
+        a.btn.btn-default Apex Triggers
+        a.btn.btn-default Apex Tests
+      table#coverage-table.table.table-bordered
+        thead
+          th(data-field='NamespacePrefix') Namespace
+          th(data-field='Type') Type
+          th(data-field='Name') Name
+          th(data-field='NumLinesCovered') Covered
+          th(data-field='NumLinesUncovered') Uncovered
+          th(data-field='Total') Total
+          th(data-field='CoverageNumeric') Coverage %
+          th Classes
+        tbody#table-body(data-bind="collection:$collection")
+    #ApexDetailTemplate
+      h2(data-bind="text:Name")
+      .row
+        .col-md-8
+          pre(data-bind="text:Body")
+        .col-md-4
+          h4 Tests
+    

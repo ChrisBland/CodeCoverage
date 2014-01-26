@@ -11,22 +11,18 @@ var ToolingAPI = function(opts){
 
 ToolingAPI.prototype.getApexClasses = function(callback) {
   var self = this;
-  var query = 'SELECT Id, Name, ApiVersion, CreatedDate, LastModifiedDate FROM ApexClass';
+  var query = 'SELECT Id, Name, ApiVersion, CreatedDate, LastModifiedDate, NamespacePrefix FROM ApexClass';
   var uri = self.oauth.instance_url +'/services/data/v29.0/tooling/query/';
   var opts = self.getOpts(uri, 'GET');
   opts.qs = {q: query};
   request(opts, function(err, res, body){
     if(err){
-      console.log('***************FREAK OUT');
       console.log(err);
       callback(err, null);
     }else{
-      var apexClasses = {};
+      console.log(body);
       var data = JSON.parse(body);
-      _.each(data.records, function(record){
-        apexClasses[record.Id] = record;
-      });
-      callback(null, apexClasses);
+      callback(null, data.records);
     }
   });
 };
@@ -39,23 +35,18 @@ ToolingAPI.prototype.getApexTriggers = function(callback) {
   opts.qs = {q: query};
   request(opts, function(err, res, body){
     if(err){
-      console.log('***************FREAK OUT');
-      console.log(err);
       callback(err, null);
     }else{
       var apexTriggers = {};
       var data = JSON.parse(body);
-      _.each(data.records, function(record){
-        apexTriggers[record.Id] = record;
-      });
-      callback(null, apexTriggers);
+      callback(null, data.records);
     }
   });
 };
 
-ToolingAPI.prototype.getCoverageForClasses = function(apexClasses, callback) {
+ToolingAPI.prototype.getCoverageForClasses = function(callback) {
   var self = this;
-  var query = 'SELECT Id, ApexClassorTriggerId, NumLinesCovered, NumLinesUncovered FROM ApexCodeCoverageAggregate';
+  var query = 'SELECT Id, ApexClassorTriggerId, NumLinesCovered, NumLinesUncovered FROM ApexCodeCoverageAggregate ';
   var uri = self.oauth.instance_url +'/services/data/v29.0/tooling/query/';
   var opts = self.getOpts(uri, 'GET');
   opts.qs = {q: query};
@@ -64,12 +55,24 @@ ToolingAPI.prototype.getCoverageForClasses = function(apexClasses, callback) {
       callback(err, null);
     }else{
       var data = JSON.parse(body);
-      _.each(data.records, function(record){
-        if(apexClasses[record.ApexClassOrTriggerId] !== undefined ){
-          apexClasses[record.ApexClassOrTriggerId].coverage = record;
-        }
-      });
-      callback(null, apexClasses);
+      callback(null, data.records);
+    }
+  });
+};
+
+ToolingAPI.prototype.getApexCodeCoverage = function(id, callback) {
+  var self = this;
+  var query = 'SELECT Id, ApexClassorTriggerId, ApexTestClassId,  NumLinesCovered, NumLinesUncovered FROM ApexCodeCoverage WHERE ';
+  query+= 'ApexClassorTriggerId = \''+id+'\'';
+  var uri = self.oauth.instance_url +'/services/data/v29.0/tooling/query/';
+  var opts = self.getOpts(uri, 'GET');
+  opts.qs = {q: query};
+  request(opts, function(err, res, body){
+    if(err){
+      callback(err, null);
+    }else{
+      var data = JSON.parse(body);
+      callback(null, data.records);
     }
   });
 };
@@ -106,6 +109,25 @@ ToolingAPI.prototype.orgCodeCoverage = function(callback) {
         });        
       }
     });
+};
+
+ToolingAPI.prototype.ApexBody = function(params, callback) {
+  var self = this;
+  var resource;
+  if(params.type == 'Apex Class') resource = 'ApexClass';
+  if(params.type == 'Apex Trigger') resource = 'ApexTrigger';
+  var uri = self.oauth.instance_url +'/services/data/v29.0/tooling/sobjects/'+resource+'/'+params.id;
+  var opts = self.getOpts(uri, 'GET');
+  return request(opts, function(err, res, body){
+    if(err){
+      console.log('err');
+      return callback(err, null);
+    }else{
+      data = JSON.parse(body);
+      console.log(data);
+      return callback(err, data);
+    }
+  });
 };
 
 ToolingAPI.prototype.ApexCodeCoverageAggregate = function(id, type, callback) {
