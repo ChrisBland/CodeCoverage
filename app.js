@@ -32,8 +32,8 @@ app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
 passport.use(new ForceDotComStrategy({
-    clientID: '3MVG9A2kN3Bn17hv7Rdm203zJQUgJFHyTNHDnbB7VDDvXjMSsSYyLnjE_7Awy9ZBiyuFILqN_03wiM2HQeTga',
-    clientSecret: '2317811878079398283',
+    clientID: '',
+    clientSecret: '',
     callbackURL: 'http://localhost:3000/auth/forcedotcom/callback'
   },
   function(token, tokenSecret, profile, done) {
