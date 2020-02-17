@@ -10,7 +10,7 @@
     "jade": "*",
     "nforce": "~0.6.0",
     "passport": "~0.1.17",
-    "request": "~2.27.0",
+    "request": "~2.88.2",
     "underscore": "~1.5.2",
     "async": "~0.2.9",
     "q": "~0.9.7",
